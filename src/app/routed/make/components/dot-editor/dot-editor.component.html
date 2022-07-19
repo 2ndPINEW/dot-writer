@@ -1,0 +1,27 @@
+<div>
+  <input [(colorPicker)]="picker1" [style.background]="picker1" (colorPickerChange)="onColorChange($event)"/>
+  <input [(colorPicker)]="picker2" [style.background]="picker2" (colorPickerChange)="onColorChange($event)"/>
+  <input [(colorPicker)]="picker3" [style.background]="picker3" (colorPickerChange)="onColorChange($event)"/>
+  <input [(colorPicker)]="picker4" [style.background]="picker4" (colorPickerChange)="onColorChange($event)"/>
+  <input [(colorPicker)]="picker5" [style.background]="picker5" (colorPickerChange)="onColorChange($event)"/>
+  <input [(colorPicker)]="picker6" [style.background]="picker6" (colorPickerChange)="onColorChange($event)"/>
+  <input [(colorPicker)]="picker7" [style.background]="picker7" (colorPickerChange)="onColorChange($event)"/>
+  <input [(colorPicker)]="picker8" [style.background]="picker8" (colorPickerChange)="onColorChange($event)"/>
+</div>
+
+<div class="dot-area" (mouseleave)="onMouseLeaveArea()">
+  <div class="row-line" *ngFor="let row of rows">
+    <div
+      class="column-item"
+      *ngFor="let column of columns"
+      [style.background-color]="color(row, column)"
+      (click)="onClickPixel(row, column)"
+      (mousemove)="onMouseEnterPixel(row, column)"></div>
+  </div>
+</div>
+
+<div>New</div>
+<textarea rows="10" [value]="colorArray"></textarea>
+
+<div>Old</div>
+<textarea type="text" class="text" rows="10" [(ngModel)]="pixelArrayString"></textarea>
