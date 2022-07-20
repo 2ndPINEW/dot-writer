@@ -1,4 +1,4 @@
-<div>
+<div (click)="onClick($event)" id=divpickers>
   <input [(colorPicker)]="picker1" [style.background]="picker1" (colorPickerChange)="onColorChange1($event)"/>
   <input [(colorPicker)]="picker2" [style.background]="picker2" (colorPickerChange)="onColorChange2($event)"/>
   <input [(colorPicker)]="picker3" [style.background]="picker3" (colorPickerChange)="onColorChange3($event)"/>
