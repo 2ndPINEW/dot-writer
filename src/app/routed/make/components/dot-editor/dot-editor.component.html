@@ -9,6 +9,13 @@
   <input [(colorPicker)]="picker8" [style.background]="picker8" (colorPickerChange)="onColorChange($event)"/>
 </div>
 
+<div class="frame-controll">
+  <div class="prev" (click)="changeFrame('prev')">⇦</div>
+  <div class="count">{{frame + 1}}/{{frames.length}}</div>
+  <div class="next" (click)="changeFrame('next-middle')">・</div>
+  <div class="next" (click)="changeFrame('next')">⇨</div>
+</div>
+
 <div class="dot-area" (mouseleave)="onMouseLeaveArea()">
   <div class="row-line" *ngFor="let row of rows">
     <div
@@ -20,8 +27,4 @@
   </div>
 </div>
 
-<div>New</div>
-<textarea rows="10" [value]="colorArray"></textarea>
-
-<div>Old</div>
-<textarea type="text" class="text" rows="10" [(ngModel)]="pixelArrayString"></textarea>
+<textarea rows="10" [(ngModel)]="colorArray"></textarea>

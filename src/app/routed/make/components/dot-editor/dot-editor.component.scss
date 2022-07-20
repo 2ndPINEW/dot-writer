@@ -9,6 +9,19 @@
     margin-bottom: 16px;
   }
 
+  .frame-controll {
+    display: flex;
+    padding: 8px;
+
+    .prev, .next {
+      font-size: 24px;
+    }
+
+    .count {
+      line-height: 36px;
+    }
+  }
+
   textarea {
     margin-top: 16px;
     width: 100%;
