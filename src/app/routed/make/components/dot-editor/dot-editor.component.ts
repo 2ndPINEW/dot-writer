@@ -20,7 +20,7 @@ export class DotEditorComponent implements OnInit{
   constructor() { }
 
   /** 各フレームごとのピクセルの状態 */
-  frames: string[][][] = []
+  frames: number[][][] = []
 
   /** 選択中のフレームのインデックス */
   frame = 0
@@ -29,7 +29,7 @@ export class DotEditorComponent implements OnInit{
   private pixels: Array2<number> = [14, 16]
 
   /** 選択中の色 */
-  picked: string = '#ffffff'
+  picked: number = 0
   // なんか配列にしたらエラー出るからいっぱい変数作った
   picker1: string = '#ffffff'
   picker2: string = '#ffffff'
@@ -63,9 +63,9 @@ export class DotEditorComponent implements OnInit{
   }
 
   /** 初期状態の1フレームを作る */
-  generateBlankPixels (): string[][] {
-    const pixels: string[][] = []
-    const columns = this.columns.map(() => '#FFFFFF')
+  generateBlankPixels (): number[][] {
+    const pixels: number[][] = []
+    const columns = this.columns.map(() => 0);
     this.rows.forEach(() => {
       pixels.push([...columns])
     })
@@ -73,12 +73,34 @@ export class DotEditorComponent implements OnInit{
   }
 
   /** カラーピッカーで色を変えた時 */
-  onColorChange (color: string): void {
-    this.picked = color
+  onColorChange1 (color: string): void {
+    this.picked = 0
+  }
+  onColorChange2 (color: string): void {
+    this.picked = 1
+  }
+  onColorChange3 (color: string): void {
+    this.picked = 2
+  }
+  onColorChange4 (color: string): void {
+    this.picked = 3
+  }
+  onColorChange5 (color: string): void {
+    this.picked = 4
+  }
+  onColorChange6 (color: string): void {
+    this.picked = 5
+  }
+  onColorChange7 (color: string): void {
+    this.picked = 6
+  }
+  onColorChange8 (color: string): void {
+    this.picked = 7
   }
 
   /** ピクセルをクリックしたときに選択中のフレームのピクセルに選択中の色を入れる */
   onClickPixel (row: number, column: number): void {
+    console.log(this.picked)
     this.frames[this.frame][row][column] = this.picked
   }
 
@@ -125,7 +147,9 @@ export class DotEditorComponent implements OnInit{
 
   /** ピクセルの色 */
   color (row: number, column: number): string {
-    return this.frames[this.frame][row][column]
+    const c = this.frames[this.frame][row][column];
+    const pickers = [this.picker1, this.picker2, this.picker3, this.picker4, this.picker5, this.picker6, this.picker7, this.picker8];
+    return pickers[c];
   }
 
   /** 入力欄に入れたフレームの情報を変数に入れる */
@@ -139,12 +163,12 @@ export class DotEditorComponent implements OnInit{
     }
   }
 
-  setPixelArray (paret: string, v: string, frame: number): void {
+  setPixelArray (palette: string, v: string, frame: number): void {
     const values = v.split(',')
     this.frames[frame].forEach((rows, r) => {
       rows.forEach((col, c) => {
         const poped = values.shift()
-        this.frames[frame][r][c] = '#' + paret.split(',')[Number(poped)].replace(/\s+/g, '')
+        this.frames[frame][r][c] = Number(poped)
       })
     })
   }
@@ -171,6 +195,6 @@ export class DotEditorComponent implements OnInit{
   }
 
   getPixelArrayString (frame: number): string {
-    return this.frames[frame].flat().map(v => v?.replace('#', '').toLocaleUpperCase()).join(',')
+    return this.frames[frame].flat().join(',')
   }
 }
