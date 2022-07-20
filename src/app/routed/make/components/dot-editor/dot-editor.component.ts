@@ -100,7 +100,6 @@ export class DotEditorComponent implements OnInit{
 
   /** ピクセルをクリックしたときに選択中のフレームのピクセルに選択中の色を入れる */
   onClickPixel (row: number, column: number): void {
-    console.log(this.picked)
     this.frames[this.frame][row][column] = this.picked
   }
 
@@ -139,10 +138,12 @@ export class DotEditorComponent implements OnInit{
   }
 
   get rows (): Array<number> {
-    return [...Array(this.pixels[0])].map((_, i) => (i))
+    const h = document.location.hash.substring(1).split(",")[1]
+    return [...Array(Number(h) || this.pixels[0])].map((_, i) => (i))
   }
   get columns (): Array<number> {
-    return [...Array(this.pixels[1])].map((_, i) => (i))
+    const w = document.location.hash.substring(1).split(",")[0]
+    return [...Array(Number(w) || this.pixels[1])].map((_, i) => (i))
   }
 
   /** ピクセルの色 */
