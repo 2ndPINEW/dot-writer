@@ -1,12 +1,12 @@
-<div>
-  <input [(colorPicker)]="picker1" [style.background]="picker1" (colorPickerChange)="onColorChange($event)"/>
-  <input [(colorPicker)]="picker2" [style.background]="picker2" (colorPickerChange)="onColorChange($event)"/>
-  <input [(colorPicker)]="picker3" [style.background]="picker3" (colorPickerChange)="onColorChange($event)"/>
-  <input [(colorPicker)]="picker4" [style.background]="picker4" (colorPickerChange)="onColorChange($event)"/>
-  <input [(colorPicker)]="picker5" [style.background]="picker5" (colorPickerChange)="onColorChange($event)"/>
-  <input [(colorPicker)]="picker6" [style.background]="picker6" (colorPickerChange)="onColorChange($event)"/>
-  <input [(colorPicker)]="picker7" [style.background]="picker7" (colorPickerChange)="onColorChange($event)"/>
-  <input [(colorPicker)]="picker8" [style.background]="picker8" (colorPickerChange)="onColorChange($event)"/>
+<div (click)="onClick($event)" id=divpickers>
+  <input [(colorPicker)]="picker1" [style.background]="picker1" (colorPickerChange)="onColorChange1($event)"/>
+  <input [(colorPicker)]="picker2" [style.background]="picker2" (colorPickerChange)="onColorChange2($event)"/>
+  <input [(colorPicker)]="picker3" [style.background]="picker3" (colorPickerChange)="onColorChange3($event)"/>
+  <input [(colorPicker)]="picker4" [style.background]="picker4" (colorPickerChange)="onColorChange4($event)"/>
+  <input [(colorPicker)]="picker5" [style.background]="picker5" (colorPickerChange)="onColorChange5($event)"/>
+  <input [(colorPicker)]="picker6" [style.background]="picker6" (colorPickerChange)="onColorChange6($event)"/>
+  <input [(colorPicker)]="picker7" [style.background]="picker7" (colorPickerChange)="onColorChange7($event)"/>
+  <input [(colorPicker)]="picker8" [style.background]="picker8" (colorPickerChange)="onColorChange8($event)"/>
 </div>
 
 <div class="frame-controll">

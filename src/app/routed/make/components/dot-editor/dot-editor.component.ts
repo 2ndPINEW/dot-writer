@@ -20,7 +20,7 @@ export class DotEditorComponent implements OnInit{
   constructor() { }
 
   /** 各フレームごとのピクセルの状態 */
-  frames: string[][][] = []
+  frames: number[][][] = []
 
   /** 選択中のフレームのインデックス */
   frame = 0
@@ -29,7 +29,7 @@ export class DotEditorComponent implements OnInit{
   private pixels: Array2<number> = [14, 16]
 
   /** 選択中の色 */
-  picked: string = '#ffffff'
+  picked: number = 0
   // なんか配列にしたらエラー出るからいっぱい変数作った
   picker1: string = '#ffffff'
   picker2: string = '#ffffff'
@@ -63,18 +63,50 @@ export class DotEditorComponent implements OnInit{
   }
 
   /** 初期状態の1フレームを作る */
-  generateBlankPixels (): string[][] {
-    const pixels: string[][] = []
-    const columns = this.columns.map(() => '#FFFFFF')
+  generateBlankPixels (): number[][] {
+    const pixels: number[][] = []
+    const columns = this.columns.map(() => 0);
     this.rows.forEach(() => {
       pixels.push([...columns])
     })
     return pixels
   }
 
+  /** カラーピッカーをクリックした時 */
+  onClick (event: Event): void {
+    const inp = event.target
+    const inps = document.querySelectorAll("#divpickers > input")
+    inps.forEach((i, n) => {
+      if (i == inp) {
+        this.picked = n
+      }
+    })
+  }
+
   /** カラーピッカーで色を変えた時 */
-  onColorChange (color: string): void {
-    this.picked = color
+  onColorChange1 (color: string): void {
+    this.picked = 0
+  }
+  onColorChange2 (color: string): void {
+    this.picked = 1
+  }
+  onColorChange3 (color: string): void {
+    this.picked = 2
+  }
+  onColorChange4 (color: string): void {
+    this.picked = 3
+  }
+  onColorChange5 (color: string): void {
+    this.picked = 4
+  }
+  onColorChange6 (color: string): void {
+    this.picked = 5
+  }
+  onColorChange7 (color: string): void {
+    this.picked = 6
+  }
+  onColorChange8 (color: string): void {
+    this.picked = 7
   }
 
   /** ピクセルをクリックしたときに選択中のフレームのピクセルに選択中の色を入れる */
@@ -117,34 +149,47 @@ export class DotEditorComponent implements OnInit{
   }
 
   get rows (): Array<number> {
-    return [...Array(this.pixels[0])].map((_, i) => (i))
+    const h = document.location.hash.substring(1).split(",")[1]
+    return [...Array(Number(h) || this.pixels[0])].map((_, i) => (i))
   }
   get columns (): Array<number> {
-    return [...Array(this.pixels[1])].map((_, i) => (i))
+    const w = document.location.hash.substring(1).split(",")[0]
+    return [...Array(Number(w) || this.pixels[1])].map((_, i) => (i))
   }
 
   /** ピクセルの色 */
   color (row: number, column: number): string {
-    return this.frames[this.frame][row][column]
+    const c = this.frames[this.frame][row][column];
+    const pickers: Array<string> = [this.picker1, this.picker2, this.picker3, this.picker4, this.picker5, this.picker6, this.picker7, this.picker8]
+    return pickers[c];
   }
 
   /** 入力欄に入れたフレームの情報を変数に入れる */
   set colorArray(v: string) {
     const lines = v.split('"').join('').split(',\n').filter(v => !!v)
-    for(let i = 0; i < lines.length; i += 3) {
+    for (let i = 0; i < lines.length; i += 3) {
       if (i >= this.frames.length) {
         this.frames.push(this.generateBlankPixels())
       }
-      this.setPixelArray(lines[i+1], lines[i+2], i / 3)
+      this.setPixelArray(lines[i + 1], lines[i + 2], i / 3)
     }
   }
 
-  setPixelArray (paret: string, v: string, frame: number): void {
+  setPixelArray (p: string, v: string, frame: number): void {
+    const palette = p.split(',')
+    this.picker1 = palette[0]
+    this.picker2 = palette[1]
+    this.picker3 = palette[2]
+    this.picker4 = palette[3]
+    this.picker5 = palette[4]
+    this.picker6 = palette[5]
+    this.picker7 = palette[6]
+    this.picker8 = palette[7]
     const values = v.split(',')
     this.frames[frame].forEach((rows, r) => {
       rows.forEach((col, c) => {
         const poped = values.shift()
-        this.frames[frame][r][c] = '#' + paret.split(',')[Number(poped)].replace(/\s+/g, '')
+        this.frames[frame][r][c] = Number(poped)
       })
     })
   }
@@ -152,25 +197,16 @@ export class DotEditorComponent implements OnInit{
   /** フレーム情報の変数から適当にフォーマットした文字列にする */
   get colorArray(): string {
     let output: string = ''
+    const colors: Array<string> = [this.picker1, this.picker2, this.picker3, this.picker4, this.picker5, this.picker6, this.picker7, this.picker8]
     this.frames.forEach((_frame, frameIndex) => {
       const pixels = this.getPixelArrayString(frameIndex)
-      const colors: string[] = []
-      let newPixel: number[] = []
-      pixels.split(',').forEach(pixel => {
-        const i = colors.findIndex(color => color === pixel)
-        if(i < 0) {
-          colors.push(pixel)
-          newPixel.push(colors.length - 1)
-        } else {
-          newPixel.push(i)
-        }
-      })
+      const newPixel: string[] = pixels.split(',')
       output += `"100",\n"${colors}",\n"${newPixel.join(',')}",\n`
     })
     return output
   }
 
   getPixelArrayString (frame: number): string {
-    return this.frames[frame].flat().map(v => v?.replace('#', '').toLocaleUpperCase()).join(',')
+    return this.frames[frame].flat().join(',')
   }
 }
