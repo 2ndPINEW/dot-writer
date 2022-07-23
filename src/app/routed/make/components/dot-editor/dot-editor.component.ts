@@ -144,13 +144,14 @@ export class DotEditorComponent implements OnInit{
     }
     if (direction === 'next') {
       if (this.frame + 1 >= this.frames.length) {
-        this.frames.push(this.generateBlankPixels())
+        // TODO: JSON.stringify だと配列の順番保証されない気がする
+        this.frames.push(JSON.parse(JSON.stringify(this.frames[this.frame])))
         this.times.push(100)
       }
       this.frame++
     }
     if (direction === 'next-middle' && this.frame + 1 < this.frames.length) {
-      this.frames.splice(this.frame + 1, 0, this.generateBlankPixels())
+      this.frames.splice(this.frame + 1, 0, JSON.parse(JSON.stringify(this.frames[this.frame])))
       this.times.splice(this.frame + 1, 0, 100)
       this.frame++
     }
