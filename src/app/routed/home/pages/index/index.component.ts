@@ -32,7 +32,8 @@ export class IndexComponent {
   onClick (data: string): void {
     fetch('http://' + this.ip + '/set', {
       body: data,
-      method: 'POST'
+      method: 'POST',
+      mode: 'cors'
     })
   }
 }
