@@ -33,10 +33,7 @@ export class IndexComponent {
     fetch('http://' + this.ip + '/set', {
       body: data,
       method: 'POST',
-      mode: 'cors',
-      headers: [
-        ['origin', 'd3lhti9xyydaft.cloudfront.net']
-      ]
+      mode: 'cors'
     })
   }
 }
