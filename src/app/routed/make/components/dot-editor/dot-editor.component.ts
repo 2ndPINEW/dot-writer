@@ -16,8 +16,13 @@ import { Array2 } from 'src/app/shared/service/util-types.interface';
   ]
 })
 export class DotEditorComponent implements OnInit{
+  http: any;
 
-  constructor() { }
+  constructor(
+  ) { }
+
+  /** 各フレームごとの時間 */
+  times: number[] = []
 
   /** 各フレームごとのピクセルの状態 */
   frames: number[][][] = []
@@ -60,6 +65,7 @@ export class DotEditorComponent implements OnInit{
   initPixelColors (): void {
     this.frames = []
     this.frames[0] = this.generateBlankPixels()
+    this.times[0] = 100
   }
 
   /** 初期状態の1フレームを作る */
@@ -139,11 +145,13 @@ export class DotEditorComponent implements OnInit{
     if (direction === 'next') {
       if (this.frame + 1 >= this.frames.length) {
         this.frames.push(this.generateBlankPixels())
+        this.times.push(100)
       }
       this.frame++
     }
     if (direction === 'next-middle' && this.frame + 1 < this.frames.length) {
       this.frames.splice(this.frame + 1, 0, this.generateBlankPixels())
+      this.times.splice(this.frame + 1, 0, 100)
       this.frame++
     }
   }
@@ -201,12 +209,23 @@ export class DotEditorComponent implements OnInit{
     this.frames.forEach((_frame, frameIndex) => {
       const pixels = this.getPixelArrayString(frameIndex)
       const newPixel: string[] = pixels.split(',')
-      output += `"100",\n"${colors}",\n"${newPixel.join(',')}",\n`
+      output += `"${this.times[frameIndex]}",\n"${colors}",\n"${newPixel.join(',')}",\n`
     })
     return output
   }
 
   getPixelArrayString (frame: number): string {
     return this.frames[frame].flat().join(',')
+  }
+
+  get colorArray2(): string {
+    let output: string[] = []
+    const colors: Array<string> = [this.picker1.replace('#', ''), this.picker2.replace('#', ''), this.picker3.replace('#', ''), this.picker4.replace('#', ''), this.picker5.replace('#', ''), this.picker6.replace('#', ''), this.picker7.replace('#', ''), this.picker8.replace('#', '')]
+    this.frames.forEach((_frame, frameIndex) => {
+      const pixels = this.getPixelArrayString(frameIndex)
+      const newPixel: string[] = pixels.split(',')
+      output.push(`${this.times[frameIndex]}-${colors}-${newPixel.join(',')}`)
+    })
+    return output.join('-')
   }
 }

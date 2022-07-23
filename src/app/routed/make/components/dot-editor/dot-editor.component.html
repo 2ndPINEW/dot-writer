@@ -9,6 +9,8 @@
   <input [(colorPicker)]="picker8" [style.background]="picker8" (colorPickerChange)="onColorChange8($event)"/>
 </div>
 
+<input class="time" type="number" [(ngModel)]="times[frame]">
+
 <div class="frame-controll">
   <div class="prev" (click)="changeFrame('prev')">⇦</div>
   <div class="count">{{frame + 1}}/{{frames.length}}</div>
@@ -28,3 +30,4 @@
 </div>
 
 <textarea rows="10" [(ngModel)]="colorArray"></textarea>
+<textarea rows="10" [value]="colorArray2"></textarea>

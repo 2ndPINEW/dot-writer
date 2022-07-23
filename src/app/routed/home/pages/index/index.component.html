@@ -1,3 +1,4 @@
-<h1>This is home component :)</h1>
-
-<a routerLink="/make">make</a>
+<div class="wrapper">
+  <input [(ngModel)]="ip">
+  <button *ngFor="let data of datas" (click)="onClick(data.data)">{{data.name}}</button>
+</div>
