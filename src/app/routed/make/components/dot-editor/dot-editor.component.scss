@@ -1,28 +1,59 @@
 :host {
   display: block;
 
-  input {
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    width: 50px;
-    cursor: pointer;
-    margin-bottom: 16px;
-  }
-
-  .time {
-    width: 200px;
-  }
-
-  .frame-controll {
+  .editor {
     display: flex;
-    padding: 8px;
 
-    .prev, .next {
-      font-size: 24px;
+    .frame-controller {
+      .frame-controll {
+        display: flex;
+        padding: 8px;
+  
+        .prev, .next {
+          font-size: 24px;
+        }
+  
+        .count {
+          line-height: 36px;
+        }
+      }
+
+      .time {
+        width: 150px;
+      }
+    }
+    
+    input {
+      display: block;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      margin: 8px;
     }
 
-    .count {
-      line-height: 36px;
+    .dot-area {
+      width: fit-content;
+      .row-line {
+        display: flex;
+        cursor: pointer;
+    
+        .column-item {
+          width: 50px;
+          aspect-ratio: 1 / 1;
+          border-top: 1px solid var(--color-border);
+          border-left: 1px solid var(--color-border);
+    
+          &:last-child {
+            border-right: 1px solid var(--color-border);
+          }
+        }
+    
+        &:last-child {
+          border-bottom: 1px solid var(--color-border);
+        }
+      }
     }
   }
 
@@ -31,26 +62,16 @@
     width: 100%;
     word-break: break-all;
   }
-  .dot-area {
-    width: fit-content;
-    .row-line {
-      display: flex;
-      cursor: pointer;
-  
-      .column-item {
-        width: 50px;
-        aspect-ratio: 1 / 1;
-        border-top: 1px solid var(--color-border);
-        border-left: 1px solid var(--color-border);
-  
-        &:last-child {
-          border-right: 1px solid var(--color-border);
-        }
-      }
-  
-      &:last-child {
-        border-bottom: 1px solid var(--color-border);
-      }
-    }
+
+  .save-name {
+    width: 200px;
+  }
+
+  .save-button {
+    border-radius: 10000px;
+    background-color: orange;
+    color: white;
+    padding: 8px;
+    cursor: pointer;
   }
 }

@@ -1,33 +1,40 @@
-<div (click)="onClick($event)" id=divpickers>
-  <input [(colorPicker)]="picker1" [style.background]="picker1" (colorPickerChange)="onColorChange1($event)"/>
-  <input [(colorPicker)]="picker2" [style.background]="picker2" (colorPickerChange)="onColorChange2($event)"/>
-  <input [(colorPicker)]="picker3" [style.background]="picker3" (colorPickerChange)="onColorChange3($event)"/>
-  <input [(colorPicker)]="picker4" [style.background]="picker4" (colorPickerChange)="onColorChange4($event)"/>
-  <input [(colorPicker)]="picker5" [style.background]="picker5" (colorPickerChange)="onColorChange5($event)"/>
-  <input [(colorPicker)]="picker6" [style.background]="picker6" (colorPickerChange)="onColorChange6($event)"/>
-  <input [(colorPicker)]="picker7" [style.background]="picker7" (colorPickerChange)="onColorChange7($event)"/>
-  <input [(colorPicker)]="picker8" [style.background]="picker8" (colorPickerChange)="onColorChange8($event)"/>
-</div>
+<div class="editor">
+  <div class="frame-controller">
+    <input class="time" type="number" [(ngModel)]="times[frame]" (ngModelChange)="timeChange()">
 
-<input class="time" type="number" [(ngModel)]="times[frame]">
-
-<div class="frame-controll">
-  <div class="prev" (click)="changeFrame('prev')">⇦</div>
-  <div class="count">{{frame + 1}}/{{frames.length}}</div>
-  <div class="next" (click)="changeFrame('next-middle')">・</div>
-  <div class="next" (click)="changeFrame('next')">⇨</div>
-</div>
-
-<div class="dot-area" (mouseleave)="onMouseLeaveArea()">
-  <div class="row-line" *ngFor="let row of rows">
-    <div
-      class="column-item"
-      *ngFor="let column of columns"
-      [style.background-color]="color(row, column)"
-      (click)="onClickPixel(row, column)"
-      (mousemove)="onMouseEnterPixel(row, column)"></div>
+    <div class="frame-controll">
+      <div class="prev" (click)="changeFrame('prev')">⇦</div>
+      <div class="count">{{frame + 1}}/{{frames.length}}</div>
+      <div class="next" (click)="changeFrame('next-middle')">・</div>
+      <div class="next" (click)="changeFrame('next')">⇨</div>
+    </div>
+  </div>
+  
+  <div (click)="onClick($event)" id=divpickers>
+    <input [(colorPicker)]="picker1" [style.background]="picker1" (colorPickerChange)="onColorChange1($event)"/>
+    <input [(colorPicker)]="picker2" [style.background]="picker2" (colorPickerChange)="onColorChange2($event)"/>
+    <input [(colorPicker)]="picker3" [style.background]="picker3" (colorPickerChange)="onColorChange3($event)"/>
+    <input [(colorPicker)]="picker4" [style.background]="picker4" (colorPickerChange)="onColorChange4($event)"/>
+    <input [(colorPicker)]="picker5" [style.background]="picker5" (colorPickerChange)="onColorChange5($event)"/>
+    <input [(colorPicker)]="picker6" [style.background]="picker6" (colorPickerChange)="onColorChange6($event)"/>
+    <input [(colorPicker)]="picker7" [style.background]="picker7" (colorPickerChange)="onColorChange7($event)"/>
+    <input [(colorPicker)]="picker8" [style.background]="picker8" (colorPickerChange)="onColorChange8($event)"/>
+  </div>
+  
+  <div class="dot-area" (mouseleave)="onMouseLeaveArea()">
+    <div class="row-line" *ngFor="let row of rows">
+      <div
+        class="column-item"
+        *ngFor="let column of columns"
+        [style.background-color]="color(row, column)"
+        (click)="onClickPixel(row, column)"
+        (mousemove)="onMouseEnterPixel(row, column)"></div>
+    </div>
   </div>
 </div>
 
 <textarea rows="10" [(ngModel)]="colorArray"></textarea>
 <textarea rows="10" [value]="colorArray2"></textarea>
+
+<input class="save-name" [(ngModel)]="saveName" placeholder="名前"/>
+<span class="save-button" (click)="save()">保存する</span>

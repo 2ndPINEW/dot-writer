@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { debounceTime, merge, MonoTypeOperatorFunction, Observable, Subject, throttleTime } from 'rxjs';
 import { Array2 } from 'src/app/shared/service/util-types.interface';
 
 @Component({
@@ -48,6 +49,10 @@ export class DotEditorComponent implements OnInit{
   /** マウスがクリックされた状態かどうか */
   isMouseDown: boolean = false
 
+  saveName: string = ''
+
+  private fetchEvent = new Subject<void>()
+
   @HostListener('mousedown', ['$event'])
   onMouseDown (e: Event): void {
     this.isMouseDown = true
@@ -59,6 +64,14 @@ export class DotEditorComponent implements OnInit{
 
   ngOnInit(): void {
     this.initPixelColors()
+
+    this.fetchEvent.pipe(
+      this.throunceTime(100)
+    ).subscribe(() => {
+      this._fetch()
+    })
+
+    this.fetchEvent.next()
   }
 
   /** フレームの状態を初期化する */
@@ -92,38 +105,48 @@ export class DotEditorComponent implements OnInit{
   /** カラーピッカーで色を変えた時 */
   onColorChange1 (color: string): void {
     this.picked = 0
+    this.fetchEvent.next()
   }
   onColorChange2 (color: string): void {
     this.picked = 1
+    this.fetchEvent.next()
   }
   onColorChange3 (color: string): void {
     this.picked = 2
+    this.fetchEvent.next()
   }
   onColorChange4 (color: string): void {
     this.picked = 3
+    this.fetchEvent.next()
   }
   onColorChange5 (color: string): void {
     this.picked = 4
+    this.fetchEvent.next()
   }
   onColorChange6 (color: string): void {
     this.picked = 5
+    this.fetchEvent.next()
   }
   onColorChange7 (color: string): void {
     this.picked = 6
+    this.fetchEvent.next()
   }
   onColorChange8 (color: string): void {
     this.picked = 7
+    this.fetchEvent.next()
   }
 
   /** ピクセルをクリックしたときに選択中のフレームのピクセルに選択中の色を入れる */
   onClickPixel (row: number, column: number): void {
     this.frames[this.frame][row][column] = this.picked
+    this.fetchEvent.next()
   }
 
   /** マウスカーソルがピクセルの領域に入った時にマウスがクリック中ならぬる */
   onMouseEnterPixel (row: number, column: number): void {
     if (this.isMouseDown) {
       this.frames[this.frame][row][column] = this.picked
+      this.fetchEvent.next()
     }
   }
 
@@ -143,18 +166,21 @@ export class DotEditorComponent implements OnInit{
       this.frame--
     }
     if (direction === 'next') {
-      if (this.frame + 1 >= this.frames.length) {
+      if (this.frame + 1 >= this.frames.length && this.frames.length < 30) {
         // TODO: JSON.stringify だと配列の順番保証されない気がする
         this.frames.push(JSON.parse(JSON.stringify(this.frames[this.frame])))
         this.times.push(100)
       }
-      this.frame++
+      if (this.frames.length > this.frame + 1) {
+        this.frame++
+      }
     }
-    if (direction === 'next-middle' && this.frame + 1 < this.frames.length) {
+    if (direction === 'next-middle' && this.frame + 1 < this.frames.length && this.frames.length < 30) {
       this.frames.splice(this.frame + 1, 0, JSON.parse(JSON.stringify(this.frames[this.frame])))
       this.times.splice(this.frame + 1, 0, 100)
       this.frame++
     }
+    this.fetchEvent.next()
   }
 
   get rows (): Array<number> {
@@ -228,5 +254,32 @@ export class DotEditorComponent implements OnInit{
       output.push(`${this.times[frameIndex]}-${colors}-${newPixel.join(',')}`)
     })
     return output.join('-')
+  }
+
+  private _fetch (): void {
+    fetch('http://192.168.0.194:80/set', {
+      method: 'POST',
+      body: this.colorArray2
+    })
+  }
+
+  private throunceTime<T>(duration: number): MonoTypeOperatorFunction<T> {
+    return (source: Observable<T>) =>
+      merge(source.pipe(throttleTime(duration)), source.pipe(debounceTime(duration)))
+        .pipe(throttleTime(0, undefined, { leading: true, trailing: false }));
+  }
+
+  timeChange (): void {
+    this.fetchEvent.next()
+  }
+
+  async save (): Promise<void> {
+    await fetch('https://script.google.com/macros/s/AKfycbwPulZGtt84u0DJDQA3dFDMMxyzqUFiglM293hsakaMYrZYkN1zYgLqfQnnXkEe485v/exec', {
+      method: 'POST',
+      body: JSON.stringify({
+        data: this.colorArray2,
+        name: this.saveName
+      })
+    })
   }
 }
